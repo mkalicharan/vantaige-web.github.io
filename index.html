@@ -27,6 +27,9 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <!-- add the html to google send data from google sheet-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
   <!-- =======================================================
   * Template Name: Vantaige - v4.1.0
@@ -535,33 +538,32 @@
           </div>
 
           <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-            <form action="mailto:sales@vantaige.com" method="post"  enctype="text/plain">
+             <form id="form" target="_self" onsubmit="return postToGoogle();" action="" autocomplete="off"> 
+              
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                  <input type="text" name="entry.116053320" class="form-control" id="name" placeholder="Your Name" required>
                 </div>
                 <div class="form-group col-md-6 mt-3 mt-md-0">
                   <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                  <input type="email" class="form-control" name="entry.1423107325" id="email" placeholder="Your Email" required>
                 </div>
               </div>
               <div class="form-group mt-3">
                 <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+                <input type="text" class="form-control" name="entry.1892647877" id="subject" placeholder="Subject" required>
               </div>
               <div class="form-group mt-3">
                 <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
+                <textarea class="form-control" name="entry.1142524809" rows="10" id="message" required></textarea>
               </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-              <input type="reset" value="Reset">
+              
+              <div class="text-center"><button id="send" type="submit" value="Send"  >Send Message</button></div>
+              
             </form>
+            <h3 id="success-msg" style="text-align: center !important; margin-top:190px !important; display:none; color:#fff"> Your Request has been posted to Google Spreadsheet</h3>
+
           </div>
 
         </div>
@@ -658,6 +660,60 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
+  <!-- send the google from of data in javascript -->
+ <script>
+  function postToGoogle() {
+                  var field1 = $("#name").val();
+                  var field2 = $("#email").val();
+                  var field3 = $("#subject").val();
+                  var field4 = $("#message").val();
+           
+          if(field1 == ""){
+            alert('Please Fill Your Name');
+            document.getElementById("name").focus();
+            return false;
+          }
+          if(field2 == ""){
+            alert('Please Fill Your Email');
+            document.getElementById("email").focus();
+            return false;
+          }
+          if(field3 == "" ){
+            alert('Please Fill Your subject');
+            document.getElementById("subject").focus();
+            return false;
+          }
+          if(field4 == "" ){
+            alert('Please Fill Your message');
+            document.getElementById("message").focus();
+            return false;
+          }
+  
+  
+          
+    
+                  $.ajax({
+                      url: "https://docs.google.com/forms/d/1EesPK3aR6Yw5KsrXgGYyocENWLtKcpm0DzWgsQwgi7U/formResponse?",
+            data: {"entry.116053320": field1, "entry.1423107325": field2, "entry.1892647877": field3, "entry.1142524809": field4},
+                      type: "POST",
+                      dataType: "xml",
+                      success: function(d)
+            {
+            },
+            error: function(x, y, z)
+              {
+  
+                $('#success-msg').show();
+                $('#form').hide();
+                
+              }
+                  });
+          return false;
+              }
+  </script>
+ 
+  
+  
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
